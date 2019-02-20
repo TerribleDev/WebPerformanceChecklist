@@ -34,6 +34,14 @@ A checklist to make sure you website will be fast!
   * Universal selectors like `*, [disabled], [type=“text”]`, etc. are very expensive for the browser to match, as every element in the DOM must be checked.
 * Avoid deeply nested dependent selectors
   * The descendant selector is very costly, as the browser must check for a match with every descendant element. On a complex web page, this can result in thousands and thousands (perhaps even more) of descendant selector searches.
+* Use media queries to load files based on use case
+  
+```css 
+<link href="style.css"    rel="stylesheet" media="all">
+<link href="portrait.css" rel="stylesheet" media="orientation:portrait">
+<link href="print.css"    rel="stylesheet" media="print">
+<link href="desktop.css"    rel="stylesheet" media="(min-width: 720px)">
+```
 
 ## JS
 
