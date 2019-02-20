@@ -12,6 +12,18 @@ A checklist to make sure you website will be fast!
   - [ ]  `<script async src="https://hi.js"></script>`
   - [ ]  or `defer` when scripts have dependencies
 
+## Images
+
+- [ ] Always use next gen formats
+  - [ ] webp
+  - [ ] jpeg xr
+  - [ ] jpeg 2000
+- [ ] Always use jpg for photography
+- [ ] Size images properly
+- [ ] Use srcsets for multiple image sizes
+- [ ] Use the `<picture>` element to let the browser select the right image for a scenario
+- [ ] Lazy load images below the fold
+
 ## Fonts
 
 - [ ]  Fonts should always load `woff2` first
@@ -58,6 +70,7 @@ A checklist to make sure you website will be fast!
 - [ ]  Support Brotli compression
   - [ ]  15-30% smaller than gzip
 - [ ]  Compress with gzip, or zopfli as a fallback to brotli
+- [ ]  Do not ship unused css, js
   
 ## PWA
 - [ ]  Use a service worker to cache assets
