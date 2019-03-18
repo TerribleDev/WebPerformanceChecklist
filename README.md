@@ -4,7 +4,7 @@ A checklist to make sure you website will be fast!
 
 ## HTML
 
-- [ ]  critical link tags are in head
+- [ ]  critical link (aka css) tags are in head
 - [ ]  less critical link tags are end of body
 - [ ]  less critical link tags lazy load
   - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' `
