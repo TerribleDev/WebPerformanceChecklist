@@ -15,10 +15,10 @@ A checklist to make sure you website will be fast!
 ## Images
 
 - [ ] Always use next gen formats
-  - [ ] webp
-  - [ ] jpeg xr
-  - [ ] jpeg 2000
-- [ ] Always use jpg for photography
+  - [ ] webp -> chrome/firefox
+  - [ ] jpeg xr -> ie11/edge
+  - [ ] jpeg 2000 -> safari
+- [ ] use jpg for photography, not png
 - [ ] Size images properly
 - [ ] Use srcsets for multiple image sizes
 - [ ] Use the `<picture>` element to let the browser select the right image for a scenario
