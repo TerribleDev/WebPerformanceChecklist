@@ -7,7 +7,7 @@ A checklist to make sure you website will be fast!
 - [ ]  critical link (aka css) tags are in head
 - [ ]  less critical link tags are end of body
 - [ ]  less critical link tags lazy load
-  - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' `
+  - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' >`
 - [ ]  JS loads with the async property
   - [ ]  `<script async src="https://hi.js"></script>`
   - [ ]  or `defer` when scripts need to be loaded in order, or require the DOMContentLoadedEvent
