@@ -10,7 +10,7 @@ A checklist to make sure you website will be fast!
   - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' `
 - [ ]  JS loads with the async property
   - [ ]  `<script async src="https://hi.js"></script>`
-  - [ ]  or `defer` when scripts have dependencies
+  - [ ]  or `defer` when scripts need to be loaded in order, or require the DOMContentLoadedEvent
 
 ## Images
 
