@@ -10,7 +10,7 @@ A checklist to make sure you website will be fast!
   - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' >`
 - [ ]  JS loads with the async property
   - [ ]  `<script async src="https://hi.js"></script>`
-  - [ ]  or `defer` when scripts need to be loaded in order, or require the DOMContentLoadedEvent
+  - [ ]  or `defer` when scripts need to be loaded in order, or require the DOMContentLoaded Event
 
 ## Images
 
@@ -22,7 +22,7 @@ A checklist to make sure you website will be fast!
 - [ ] Size images properly
 - [ ] Use srcsets for multiple image sizes
 - [ ] Use the `<picture>` element to let the browser select the right image for a scenario
-- [ ] Lazy load images below the fold
+- [ ] [Lazy load images below the fold](https://aka.terrible.dev/web/lazyimages)
 
 ## Fonts
 
