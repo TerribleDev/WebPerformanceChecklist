@@ -77,3 +77,11 @@ A checklist to make sure you website will be fast!
 - [ ]  Use a service worker to prefetch pages users will most likely navigate to next
 - [ ]  Support offline, and spotty networks
 
+## Measuring Performance
+
+There's a few great tools.
+
+- Google's [Lighthouse](https://developers.google.com/web/tools/lighthouse) is built into chrome, and will score your page's performance from 0-100
+- You can use [source-map-explorer](https://www.npmjs.com/package/source-map-explorer) to visualize what is in your bundles. I often use this tool to find duplicate dependencies in a bundle.
+- [Web page test](https://www.webpagetest.org/) is always good to see how your assets load in the browser.
+- The [Chrome User Experience](https://developers.google.com/web/tools/chrome-user-experience-report) is a massive dataset extracted from chrome to show what real users see for performance. Your domain likely exists in this report today. You can [generate yourself a dashboard](https://g.co/chromeuxdash) based off the data.
