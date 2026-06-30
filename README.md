@@ -1,87 +1,76 @@
 # Web Performance Checklist
-A checklist to make sure you website will be fast!
+A checklist to make sure your website is fast and hits green Core Web Vitals!
 
+## HTML & Resource Loading
 
-## HTML
+- [ ] Critical CSS is inline or loaded immediately in the `<head>`
+- [ ] Non-critical JS loads with `defer` (to preserve execution order) or `async`
+- [ ] Use the Fetch Priority API (`fetchpriority="high"`) for critical above-the-fold resources (e.g., LCP Hero Image)
+- [ ] Use `fetchpriority="low"` for non-critical resources (e.g., below-the-fold images, async trackers)
+- [ ] Implement the Speculation Rules API for near-instant background pre-rendering of highly probable next-page navigations
 
-- [ ]  critical link (aka css) tags are in head
-- [ ]  less critical link tags are end of body
-- [ ]  less critical link tags lazy load
-  - [ ]  `<link rel="preload" as="style" onload="this.rel='stylesheet'" id='dashicons-css' >`
-- [ ]  JS loads with the async property
-  - [ ]  `<script async src="https://hi.js"></script>`
-  - [ ]  or `defer` when scripts need to be loaded in order, or require the DOMContentLoaded Event
+## Images & Media
 
-## Images
-
-- [ ] Always use next gen formats
-  - [ ] webp -> chrome/firefox
-  - [ ] jpeg xr -> ie11/edge
-  - [ ] jpeg 2000 -> safari
-- [ ] use jpg for photography, not png
-- [ ] Size images properly
-- [ ] Use srcsets for multiple image sizes
-- [ ] Use the `<picture>` element to let the browser select the right image for a scenario
-- [ ] [Lazy load images below the fold](https://aka.terrible.dev/web/lazyimages)
+- [ ] Use WebP as your universal default format for standard web graphics and transparency (replaces PNG/JPG)
+- [ ] Use AVIF for heavy photographic content and hero images to maximize compression (up to 50% smaller than JPEG)
+- [ ] Provide fallbacks using the `<picture>` element for older environments:
+  <picture>
+    <source srcset="image.avif" type="image/avif">
+    <source srcset="image.webp" type="image/webp">
+    <img src="image.jpg" alt="..." loading="lazy" width="800" height="600">
+  </picture>
+- [ ] Provide explicit `width` and `height` attributes on all image and video tags to reserve layout space and prevent Cumulative Layout Shift (CLS)
+- [ ] Lazy load below-the-fold images natively via `loading="lazy"`
 
 ## Fonts
 
-- [ ]  Fonts should always load `woff2` first
-- [ ]  `woff` for fallback
-- [ ]  You can use `font-display: swap;` to allow the browser to use a fallback font while custom font files are being downloaded.
-- [ ]  eot, or truetype is only needed for `IE < 10`
-
+- [ ] Fonts should always load `woff2` first
+- [ ] Use `font-display: swap;` to allow a fallback font while the custom font downloads
+- [ ] Preload truly critical fonts only (e.g., `<link rel="preload" as="font" type="font/woff2" crossorigin>`), and limit this to 1 or 2 files max
 
 ## CSS
 
-- [ ]  Avoid expensive selectors when possible
-  - [ ]  `border-radius`
-  - [ ]  `box-shadow`
-  - [ ]  `transform`
-  - [ ]  `filter`
-  - [ ]  `:nth-child`
-  - [ ]  `position: fixed;`
-  - [ ]  Partial matching: `[class^="wrap"]`
-- [ ]  Don't use universal selectors
-  - [ ]  Universal selectors like `*, [disabled], [type=“text”]`, etc. are very expensive for the browser to match, as every element in the DOM must be checked.
-- [ ]  Avoid deeply nested dependent selectors
-  - [ ]  The descendant selector is very costly, as the browser must check for a match with every descendant element. On a complex web page, this can result in thousands and thousands (perhaps even more) of descendant selector searches.
-- [ ]  Use media queries to load files based on use case
-  
-```css 
-<link href="style.css"    rel="stylesheet" media="all">
-<link href="portrait.css" rel="stylesheet" media="orientation:portrait">
-<link href="print.css"    rel="stylesheet" media="print">
-<link href="desktop.css"    rel="stylesheet" media="(min-width: 720px)">
-```
+- [ ] Use media queries to conditionally load layout-specific files (`media="(min-width: 720px)"`)
+- [ ] Avoid deeply nested selectors that force complex style recalculations
+- [ ] Use `content-visibility: auto;` on complex, below-the-fold layout sections to skip rendering invisible off-screen content
+- [ ] Keep properties that trigger heavy paint cycles (`box-shadow`, `filter`) isolated to their own rendering layers via `will-change` if they animate
 
-## JS
+## JavaScript & Interactivity (Optimizing for INP)
 
-- [ ]  Bundles should always be minified
-- [ ]  Bundles should have 0 comments, and all license text extracted to a separate file
+- [ ] Code-split bundles so users only download the JS required for the current route
+- [ ] Break up Long Tasks (>50ms) using native `scheduler.yield()` to keep the main thread free for user inputs
+- [ ] Defer or lazy-init non-essential third-party scripts (chat widgets, analytics) until after the main page load or until initial user interaction
+- [ ] Bundles must be minified, with comments stripped or extracted to separate license files
 
-## Assets
+## Networking & Infrastructure
 
-- [ ]  All assets should be fingerprinted
-- [ ]  All assets should have `Cache-Control: max-age=365000000, immutable` as a header
-- [ ]  Assets should be served over http/2
-- [ ]  Assets should only be served on a cookieless domain
-- [ ]  All files should be cached by a CDN
-- [ ]  Support Brotli compression
-  - [ ]  15-30% smaller than gzip
-- [ ]  Compress with gzip, or zopfli as a fallback to brotli
-- [ ]  Do not ship unused css, js
-  
-## PWA
-- [ ]  Use a service worker to cache assets
-- [ ]  Use a service worker to prefetch pages users will most likely navigate to next
-- [ ]  Support offline, and spotty networks
+- [ ] Serve all assets over HTTP/3 (QUIC) to prevent head-of-line blocking on mobile networks
+- [ ] Ensure all assets utilize optimal cache headers: `Cache-Control: max-age=31536000, immutable` alongside unique file fingerprinting (cache busting)
+- [ ] Use a Global CDN to cache static assets and HTML pages closer to edge users
+- [ ] Utilize Brotli compression as the primary compression standard, falling back to Gzip only when necessary
+- [ ] Utilize **HTTP 103 Early Hints** to eliminate "server think-time" bottlenecks
+  - [ ] Implement Early Hints at your CDN edge (e.g., Cloudflare, Akamai) or origin proxy (e.g., Nginx 1.25+) to send critical asset cues while the backend compiles the HTML payload.
+  - [ ] Only send hints for highly stable assets (like global stylesheets or primary fonts) or domain preconnects (`rel="preconnect"`) to avoid hinting outdated hashed files.
+  - [ ] Ensure Early Hints are restricted to HTTP/2 and HTTP/3 connections to prevent protocol errors on ancient HTTP/1.1 clients.
+## Architectural & Edge Rendering
+
+- [ ] Default to a server-first framework architecture to minimize client-side bundle weight
+- [ ] Implement Streaming SSR to deliver immediate HTML layout discovery to the browser
+- [ ] Push dynamic logic to Edge Workers to maintain sub-50ms Time to First Byte (TTFB) globally
+
+## DOM & Browser Rendering (CSS)
+
+- [ ] Use `content-visibility: auto;` to skip layout and painting for off-screen/below-the-fold components
+- [ ] Apply CSS Containment (`contain`) to dynamic or third-party components to prevent page-wide layout recalculations
+
+## Third-Party Tracking
+
+- [ ] Offload analytics and tracking scripts to background Web Workers using Partytown to protect the main thread
+- [ ] Enforce `requestIdleCallback()` for lazy-initializing non-critical elements like support widgets
 
 ## Measuring Performance
 
-There's a few great tools.
-
-- Google's [Lighthouse](https://developers.google.com/web/tools/lighthouse) is built into chrome, and will score your page's performance from 0-100
-- You can use [source-map-explorer](https://www.npmjs.com/package/source-map-explorer) to visualize what is in your bundles. I often use this tool to find duplicate dependencies in a bundle.
-- [Web page test](https://www.webpagetest.org/) is always good to see how your assets load in the browser.
-- The [Chrome User Experience](https://developers.google.com/web/tools/chrome-user-experience-report) is a massive dataset extracted from chrome to show what real users see for performance. Your domain likely exists in this report today. You can [generate yourself a dashboard](https://g.co/chromeuxdash) based off the data.
+- PageSpeed Insights / Lighthouse: To quickly get lab data scores and find quick wins.
+- Chrome DevTools Performance Panel: Vital for profiling Interaction to Next Paint (INP) issues and locating long tasks blocking the main thread.
+- CrUX Vis & CrUX History API: To monitor real-user field data aggregated over time by Google.
+- WebPageTest: For advanced waterfall analysis and connection throttling simulation.
