@@ -14,11 +14,13 @@ A checklist to make sure your website is fast and hits green Core Web Vitals!
 - [ ] Use WebP as your universal default format for standard web graphics and transparency (replaces PNG/JPG)
 - [ ] Use AVIF for heavy photographic content and hero images to maximize compression (up to 50% smaller than JPEG)
 - [ ] Provide fallbacks using the `<picture>` element for older environments:
+```
   <picture>
     <source srcset="image.avif" type="image/avif">
     <source srcset="image.webp" type="image/webp">
     <img src="image.jpg" alt="..." loading="lazy" width="800" height="600">
   </picture>
+```
 - [ ] Provide explicit `width` and `height` attributes on all image and video tags to reserve layout space and prevent Cumulative Layout Shift (CLS)
 - [ ] Lazy load below-the-fold images natively via `loading="lazy"`
 
